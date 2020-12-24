@@ -68,8 +68,9 @@ namespace KobeiD
 
                 using(TextWriter tw = new StreamWriter(new FileStream($"{dir}\\{chp.name}.txt", FileMode.OpenOrCreate)))
                     tw.WriteLine(chp.text);
-                chp.text = null;
                 docu = (IHTMLDocument2)new HTMLDocument();
+                docu.designMode = "On";
+                GC.Collect();
             }
             return chapters;
         }
@@ -79,6 +80,7 @@ namespace KobeiD
             use.clear(); // just in case
             Console.WriteLine($"Getting Chapter {chp.name} from {chp.chapterLink}");
             use.write(Regex.Replace(wc.DownloadString(chp.chapterLink), "<script.*?</script>", string.Empty, RegexOptions.Singleline));
+            use.close();
             GC.Collect();
             return use.all.GetEnumerator().GetFirstElementByClassNameA("chapter-entity").innerText;
         }
@@ -88,6 +90,7 @@ namespace KobeiD
             use.clear(); // just in case
             Console.WriteLine($"Getting Chapter {chp.name} from {chp.chapterLink}");
             use.write(Regex.Replace(wc.DownloadString(chp.chapterLink), "<script.*?</script>", string.Empty, RegexOptions.Singleline));
+            use.close();
             GC.Collect();
             return use.all.GetEnumerator().GetFirstElementByClassNameA("fr-view").innerText;
         }
@@ -99,6 +102,7 @@ namespace KobeiD
             wc.Headers = IDownloader.GenHeaders(chp.chapterLink.Host);
             string dwnld = wc.DownloadString(chp.chapterLink);
             use.write(dwnld);
+            use.close();
             GC.Collect();
             return use.all.GetEnumerator().GetFirstElementByClassNameA("chp_raw").innerText;
         }
@@ -110,12 +114,10 @@ namespace KobeiD
             wc.Headers = IDownloader.GenHeaders(chp.chapterLink.Host);
             string dwnld = wc.DownloadString(chp.chapterLink);
             use.write(dwnld);
-            GC.Collect();
+            use.close();
             MSHTML.IHTMLElement a = use.all.GetEnumerator().GetFirstElementByClassName("chapter-c");
-            string x = a.innerText;
-            string xx = a.outerHTML;
-            string xxx = a.innerHTML;
-            return x;
+            GC.Collect();
+            return a.innerText;
         }
     }
 }
