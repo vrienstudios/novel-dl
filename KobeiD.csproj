@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Downloaders\cScribbleHub.cs~RF114505ad.TMP" />
+    <None Remove="Downloaders\dWuxiaWorld.cs~RFb1496f.TMP" />
+    <None Remove="Extensions\Integer.cs~RF86ab86.TMP" />
+    <None Remove="Extensions\String.cs~RF155ca1b.TMP" />
+    <None Remove="Extensions\String.cs~RF910137.TMP" />
+    <None Remove="Models\Book.cs~RF35456a29.TMP" />
+    <None Remove="Models\Chapter.cs~RFbaed300.TMP" />
+    <None Remove="Program.cs~RFc2a4991.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="MSHTML.dll">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>4</VersionMajor>
+      <Guid>3050f1c5-98b5-11cf-bb82-00aa00bdce0b</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+    </COMReference>
+  </ItemGroup>
+
+</Project>
