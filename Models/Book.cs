@@ -26,6 +26,8 @@ namespace KobeiD
 
         public delegate void threadFinished();
         public event threadFinished onThreadFinish;
+        public delegate void downloadFinished();
+        public event downloadFinished onDownloadFinish;
 
         private int finishedThreads;
         private int limiter;
@@ -45,6 +47,7 @@ namespace KobeiD
             {
                 sw.Stop();
                 Console.WriteLine("Done!, Download of {0} finished in {1}", metaData.name, sw.Elapsed);
+                onDownloadFinish?.Invoke();
             }
         }
 
@@ -70,10 +73,15 @@ namespace KobeiD
             for (int id = 0; id < chapters.Length; id++)
                 for (int idx = 0; idx < chapters.Length; idx++)
                 {
-                    string chr = chapters[idx].name.SkipCharSequence(new char[] { 'C', 'h', 'a', 'p', 't', 'e', 'r', ' ' });
-                    string chra = chapters[id].name.SkipCharSequence(new char[] { 'C', 'h', 'a', 'p', 't', 'e', 'r', ' ' });
-                    char[] aaa = chr.Take(chr.ToCharArray().LeadingIntegralCount()).ToArray();
-                    if (int.Parse(chr.Take(chr.ToCharArray().LeadingIntegralCount()).ToArray()) > int.Parse(chra.Take(chra.ToCharArray().LeadingIntegralCount()).ToArray()))
+
+                    string chr = chapters[idx].name;
+                    if (chr.ToArray().FirstLIntegralCount() == 0)
+                        chr += 0;
+                    string chra = chapters[id].name;
+                    if (chra.ToArray().FirstLIntegralCount() == 0)
+                        chra += 0;
+
+                    if (chr.ToCharArray().FirstLIntegralCount() > chra.ToCharArray().FirstLIntegralCount())
                     {
                         Chapter a = chapters[id];
                         chapters[id] = chapters[idx];

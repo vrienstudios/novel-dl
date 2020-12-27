@@ -35,6 +35,7 @@ namespace KobeiD
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Ssadg1245".ToCharArray().FirstLIntegralCount());
             object[] argArray;
             if (args.Length > 0)
                 argArray = argLoop(args);
@@ -44,17 +45,12 @@ namespace KobeiD
             bk = new Book((string)argArray[0], true);
             bk.ExportToADL();
             bk.DownloadChapters((bool)argArray[1]);
-            bk.onThreadFinish += Bk_onThreadFinish;
+            bk.onDownloadFinish += DownloadFinish;
             Console.ReadLine();
         }
 
-        private static void Bk_onThreadFinish()
+        private static void DownloadFinish()
         {
-            if (finished)
-                return;
-            else
-                finished = true;
-
             Console.WriteLine("Exporting to EPUB...");
             bk = new Book(Directory.GetCurrentDirectory() + "\\Downloaded\\" + bk.metaData.name);
             bk.ExportToEPUB();

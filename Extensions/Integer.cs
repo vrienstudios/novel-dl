@@ -8,6 +8,16 @@ namespace KobeiD.Extensions
     {
 		public static int LeadingIntegralCount(this char[] str, int h = 0)
 				=> h != str.Length ? ((str[h] >= '0' && str[h] <= '9') ? LeadingIntegralCount(str, h + 1) : h) : h;
+
+        /// <summary>
+        /// Get first integrels in a sequence
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="h"></param>
+        /// <returns></returns>
+        public static int FirstLIntegralCount(this char[] str, int h = 0, int num = 0, bool f = false)
+            => h != str.Length ? (str[h] >= '0' && str[h] <= '9' ? FirstLIntegralCount(str, h + 1, (num * 10) + int.Parse(str[h].ToString()), true) : f == true ? num : FirstLIntegralCount(str, h + 1, num, f)) : (num);
+
 		public static int CountFollowingWhiteSpace(this string str, int h, int i = 0)
 				=> (h > 0) ? (str[h] == '\x20' ? CountFollowingWhiteSpace(str, h - 1, i + 1) : i) : i;
 
