@@ -79,8 +79,17 @@ namespace KobeiD
         {
             use.clear(); // just in case
             Console.WriteLine($"Getting Chapter {chp.name} from {chp.chapterLink}");
-            use.write(Regex.Replace(wc.DownloadString(chp.chapterLink), "<script.*?</script>", string.Empty, RegexOptions.Singleline));
-            use.close();
+            B:
+            try
+            {
+                use.write(Regex.Replace(wc.DownloadString(chp.chapterLink), "<script.*?</script>", string.Empty, RegexOptions.Singleline));
+                use.close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception occurred Retry: {0}", ex.Message);
+                goto B;
+            }
             GC.Collect();
             return use.all.GetEnumerator().GetFirstElementByClassNameA("chapter-entity").innerText;
         }
