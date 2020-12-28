@@ -375,7 +375,7 @@ border: 1px solid black;
     /// <summary>
     /// JPG only please.
     /// </summary>
-    class Image
+    public class Image
     {
         public string Name;
         // Location is set when exporting to epub
@@ -385,6 +385,12 @@ border: 1px solid black;
         public static Image LoadImageFromFile(string name, string location)
             => new Image { Name = name, bytes = File.ReadAllBytes(location)};
 
+        public static Image GenerateImageFromByte(Byte[] bytes, string name)
+            => new Image { Name = name, location = $"../Pictures/{name}"};
+
+        public override string ToString()
+            => $"<image width = \"800\" height = \"1200\" xlink:href=\"{location}\"/>";
+
     }
 
     public class Page
@@ -393,8 +399,9 @@ border: 1px solid black;
         public string Text;
         public string FileName;
         public string hrefTo;
+        public Image[] images;
 
-        public static Page AutoGenerate(string pageText, string title)
+        public static Page AutoGenerate(string pageText, string title, Image[] images = null)
         {
             pageText = shorts.MakeTextXHTMLReady(pageText);
             foreach (KeyValuePair<string, string> str in shorts.RemoveList)
@@ -406,8 +413,10 @@ border: 1px solid black;
             string[] st = pageText.Split(new string[] { "\r", "\n", "\r\n" }, StringSplitOptions.None);
             foreach(string str in st)
                 sb.AppendLine($"<p>{str}</p>");
+            foreach (Image img in images)
+                sb.AppendLine(img.ToString());
             sb.AppendLine("</body></html>");
-            return new Page() { id = title, Text = sb.ToString(), FileName = title };
+            return new Page() { id = title, Text = sb.ToString(), FileName = title, images = images };
         }
     }
 
