@@ -18,9 +18,11 @@ namespace KobeiD
         {
             string uri = string.Empty;
             bool multithreaded = false;
+            if (args.Length <= 0)
+                args = Console.ReadLine().Split(' ');
             for (int idx = 0; idx < args.Length; idx++)
             {
-                switch(args[idx]) {
+                switch (args[idx]) {
                     case "-d":
                         idx++;
                         uri = args[idx];
@@ -28,6 +30,9 @@ namespace KobeiD
                     case "-mt":
                         multithreaded = true;
                         break;
+                    case "-h":
+                        uri = "-";
+                        return new object[] { uri };
                 }
             }
             return new object[] { uri, multithreaded };
@@ -35,13 +40,20 @@ namespace KobeiD
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Ssadg1245".ToCharArray().FirstLIntegralCount());
             object[] argArray;
-            if (args.Length > 0)
-                argArray = argLoop(args);
-            else
-                argArray = argLoop(Console.ReadLine().Split(' '));
-            
+            A:
+            Console.Write("c:");
+            argArray = argLoop(args);
+
+            if (((string)argArray[0])[0] == '-')
+            {
+                Console.WriteLine("     -d {url} - download flag, place the url to the novel toc page.\n     -mt - multi-threading flag. Does not work with odd prime numbers as of right now.");
+
+                if (args.Length > 0)
+                    return;
+                else
+                    goto A;
+            }
             bk = new Book((string)argArray[0], true);
             bk.ExportToADL();
             bk.DownloadChapters((bool)argArray[1]);
